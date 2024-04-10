@@ -51,5 +51,14 @@ namespace Agenda
                 richTextBoxObservaciones.Text = cellValue.Cells[4].Value.ToString();
             }
         }
+
+        private void buttonCancelar_Click(object sender, EventArgs e)
+        {
+            textBoxId.Text ="";
+            textBoxNombre.Text = "";
+            dateTimePickerFechaNacimiento.Value = DateTime.Now;
+            textBoxTelefono.Text = "";
+            richTextBoxObservaciones.Text = "";
+        }
     }
 }

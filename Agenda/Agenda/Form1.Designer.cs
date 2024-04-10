@@ -193,6 +193,7 @@
             buttonCancelar.TabIndex = 5;
             buttonCancelar.Text = "Cancelar";
             buttonCancelar.UseVisualStyleBackColor = true;
+            buttonCancelar.Click += buttonCancelar_Click;
             // 
             // dataGridViewContactos
             // 
