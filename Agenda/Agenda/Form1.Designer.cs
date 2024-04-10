@@ -1,6 +1,6 @@
 ﻿namespace Agenda
 {
-    partial class Form1
+    partial class FormAgendaDeContactos
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             groupBoxContacto = new GroupBox();
-            dateTimePickerFechaNacimiento = new DateTimePicker();
-            richTextBoxObservaciones = new RichTextBox();
-            textBoxTelefono = new TextBox();
-            textBoxNombre = new TextBox();
             textBoxId = new TextBox();
-            labelObservaciones = new Label();
-            labelTelefono = new Label();
-            labelFechaNacimiento = new Label();
-            labelNombre = new Label();
+            textBoxNombre = new TextBox();
+            dateTimePickerFechaNacimiento = new DateTimePicker();
+            textBoxTelefono = new TextBox();
+            richTextBoxObservaciones = new RichTextBox();
             labelId = new Label();
+            labelNombre = new Label();
+            labelFechaNacimiento = new Label();
+            labelTelefono = new Label();
+            labelObservaciones = new Label();
             buttonAnadir = new Button();
             buttonEliminar = new Button();
             buttonModificar = new Button();
@@ -51,16 +51,16 @@
             // 
             // groupBoxContacto
             // 
-            groupBoxContacto.Controls.Add(dateTimePickerFechaNacimiento);
-            groupBoxContacto.Controls.Add(richTextBoxObservaciones);
-            groupBoxContacto.Controls.Add(textBoxTelefono);
-            groupBoxContacto.Controls.Add(textBoxNombre);
             groupBoxContacto.Controls.Add(textBoxId);
-            groupBoxContacto.Controls.Add(labelObservaciones);
-            groupBoxContacto.Controls.Add(labelTelefono);
-            groupBoxContacto.Controls.Add(labelFechaNacimiento);
-            groupBoxContacto.Controls.Add(labelNombre);
+            groupBoxContacto.Controls.Add(textBoxNombre);
+            groupBoxContacto.Controls.Add(dateTimePickerFechaNacimiento);
+            groupBoxContacto.Controls.Add(textBoxTelefono);
+            groupBoxContacto.Controls.Add(richTextBoxObservaciones);
             groupBoxContacto.Controls.Add(labelId);
+            groupBoxContacto.Controls.Add(labelNombre);
+            groupBoxContacto.Controls.Add(labelFechaNacimiento);
+            groupBoxContacto.Controls.Add(labelTelefono);
+            groupBoxContacto.Controls.Add(labelObservaciones);
             groupBoxContacto.Location = new Point(40, 21);
             groupBoxContacto.Name = "groupBoxContacto";
             groupBoxContacto.Size = new Size(551, 239);
@@ -68,12 +68,33 @@
             groupBoxContacto.TabStop = false;
             groupBoxContacto.Text = "Contacto:";
             // 
+            // textBoxId
+            // 
+            textBoxId.Location = new Point(147, 34);
+            textBoxId.Name = "textBoxId";
+            textBoxId.Size = new Size(59, 23);
+            textBoxId.TabIndex = 5;
+            // 
+            // textBoxNombre
+            // 
+            textBoxNombre.Location = new Point(147, 63);
+            textBoxNombre.Name = "textBoxNombre";
+            textBoxNombre.Size = new Size(246, 23);
+            textBoxNombre.TabIndex = 6;
+            // 
             // dateTimePickerFechaNacimiento
             // 
             dateTimePickerFechaNacimiento.Location = new Point(147, 92);
             dateTimePickerFechaNacimiento.Name = "dateTimePickerFechaNacimiento";
             dateTimePickerFechaNacimiento.Size = new Size(200, 23);
             dateTimePickerFechaNacimiento.TabIndex = 1;
+            // 
+            // textBoxTelefono
+            // 
+            textBoxTelefono.Location = new Point(147, 121);
+            textBoxTelefono.Name = "textBoxTelefono";
+            textBoxTelefono.Size = new Size(134, 23);
+            textBoxTelefono.TabIndex = 7;
             // 
             // richTextBoxObservaciones
             // 
@@ -83,53 +104,14 @@
             richTextBoxObservaciones.TabIndex = 1;
             richTextBoxObservaciones.Text = "";
             // 
-            // textBoxTelefono
+            // labelId
             // 
-            textBoxTelefono.Location = new Point(147, 121);
-            textBoxTelefono.Name = "textBoxTelefono";
-            textBoxTelefono.Size = new Size(134, 23);
-            textBoxTelefono.TabIndex = 7;
-            // 
-            // textBoxNombre
-            // 
-            textBoxNombre.Location = new Point(147, 63);
-            textBoxNombre.Name = "textBoxNombre";
-            textBoxNombre.Size = new Size(246, 23);
-            textBoxNombre.TabIndex = 6;
-            // 
-            // textBoxId
-            // 
-            textBoxId.Location = new Point(147, 34);
-            textBoxId.Name = "textBoxId";
-            textBoxId.Size = new Size(59, 23);
-            textBoxId.TabIndex = 5;
-            // 
-            // labelObservaciones
-            // 
-            labelObservaciones.AutoSize = true;
-            labelObservaciones.Location = new Point(25, 153);
-            labelObservaciones.Name = "labelObservaciones";
-            labelObservaciones.Size = new Size(87, 15);
-            labelObservaciones.TabIndex = 4;
-            labelObservaciones.Text = "Observaciones:";
-            // 
-            // labelTelefono
-            // 
-            labelTelefono.AutoSize = true;
-            labelTelefono.Location = new Point(25, 124);
-            labelTelefono.Name = "labelTelefono";
-            labelTelefono.Size = new Size(55, 15);
-            labelTelefono.TabIndex = 3;
-            labelTelefono.Text = "Teléfono:";
-            // 
-            // labelFechaNacimiento
-            // 
-            labelFechaNacimiento.AutoSize = true;
-            labelFechaNacimiento.Location = new Point(25, 98);
-            labelFechaNacimiento.Name = "labelFechaNacimiento";
-            labelFechaNacimiento.Size = new Size(106, 15);
-            labelFechaNacimiento.TabIndex = 2;
-            labelFechaNacimiento.Text = "Fecha Nacimiento:";
+            labelId.AutoSize = true;
+            labelId.Location = new Point(25, 37);
+            labelId.Name = "labelId";
+            labelId.Size = new Size(20, 15);
+            labelId.TabIndex = 0;
+            labelId.Text = "Id:";
             // 
             // labelNombre
             // 
@@ -140,14 +122,32 @@
             labelNombre.TabIndex = 1;
             labelNombre.Text = "Nombre:";
             // 
-            // labelId
+            // labelFechaNacimiento
             // 
-            labelId.AutoSize = true;
-            labelId.Location = new Point(25, 37);
-            labelId.Name = "labelId";
-            labelId.Size = new Size(20, 15);
-            labelId.TabIndex = 0;
-            labelId.Text = "Id:";
+            labelFechaNacimiento.AutoSize = true;
+            labelFechaNacimiento.Location = new Point(25, 98);
+            labelFechaNacimiento.Name = "labelFechaNacimiento";
+            labelFechaNacimiento.Size = new Size(106, 15);
+            labelFechaNacimiento.TabIndex = 2;
+            labelFechaNacimiento.Text = "Fecha Nacimiento:";
+            // 
+            // labelTelefono
+            // 
+            labelTelefono.AutoSize = true;
+            labelTelefono.Location = new Point(25, 124);
+            labelTelefono.Name = "labelTelefono";
+            labelTelefono.Size = new Size(55, 15);
+            labelTelefono.TabIndex = 3;
+            labelTelefono.Text = "Teléfono:";
+            // 
+            // labelObservaciones
+            // 
+            labelObservaciones.AutoSize = true;
+            labelObservaciones.Location = new Point(25, 153);
+            labelObservaciones.Name = "labelObservaciones";
+            labelObservaciones.Size = new Size(87, 15);
+            labelObservaciones.TabIndex = 4;
+            labelObservaciones.Text = "Observaciones:";
             // 
             // buttonAnadir
             // 
@@ -202,21 +202,23 @@
             dataGridViewContactos.RowTemplate.Height = 25;
             dataGridViewContactos.Size = new Size(713, 122);
             dataGridViewContactos.TabIndex = 6;
+            dataGridViewContactos.CellContentClick += dataGridViewContactos_CellContentClick;
             // 
-            // Form1
+            // FormAgendaDeContactos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(dataGridViewContactos);
-            Controls.Add(buttonCancelar);
-            Controls.Add(buttonGuardar);
-            Controls.Add(buttonModificar);
-            Controls.Add(buttonEliminar);
             Controls.Add(buttonAnadir);
+            Controls.Add(buttonEliminar);
+            Controls.Add(buttonModificar);
+            Controls.Add(buttonGuardar);
+            Controls.Add(buttonCancelar);
             Controls.Add(groupBoxContacto);
-            Name = "Form1";
-            Text = "Form1";
+            Controls.Add(dataGridViewContactos);
+            Name = "FormAgendaDeContactos";
+            Text = "Agenda de Contactos";
+            Load += FormAgendaDeContactos_Load;
             groupBoxContacto.ResumeLayout(false);
             groupBoxContacto.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewContactos).EndInit();
