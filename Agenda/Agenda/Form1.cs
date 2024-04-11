@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -8,36 +9,55 @@ namespace Agenda
 {
     public partial class FormAgendaDeContactos : Form
     {
-
-        // Set up your connection string
-        string connectionString = "Server=WINAPBXCZRaeb2u\\SQLEXPRESS;Database=Agenda;Trusted_Connection=True;TrustServerCertificate=True";
-
         public FormAgendaDeContactos()
         {
             InitializeComponent();
         }
 
-        private void getContacts()
+        public void modoStandBy()
         {
-            // Execute your SQL query
-            string selectQuery = "SELECT * FROM Contactos";
+            // Desactiva las casillas
+            textBoxNombre.ReadOnly = true;
+            dateTimePickerFechaNacimiento.Enabled = false;
+            textBoxTelefono.ReadOnly = true;
+            richTextBoxObservaciones.ReadOnly = true;
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            // Desactiva botones
+            buttonGuardar.Enabled = false;
+            buttonCancelar.Enabled = false;
+
+            // Activa botones
+            buttonAnadir.Enabled = true;
+            buttonEliminar.Enabled = true;
+            if (string.IsNullOrWhiteSpace(textBoxId.Text))
             {
-                connection.Open();
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(selectQuery, connection);
-
-                // Fill a DataTable with the query results
-                DataTable table = new DataTable();
-                dataAdapter.Fill(table);
-
-                // Bind the DataGridView to the DataTable
-                dataGridViewContactos.DataSource = table;
-                dataGridViewContactos.ReadOnly = true;
+                buttonModificar.Enabled = false;
+            }
+            else
+            {
+                buttonModificar.Enabled = true;
             }
         }
 
-        private void cleanForm()
+        public void modoEdicion()
+        {
+            // Activa las casillas
+            textBoxNombre.ReadOnly = false;
+            dateTimePickerFechaNacimiento.Enabled = true;
+            textBoxTelefono.ReadOnly = false;
+            richTextBoxObservaciones.ReadOnly = false;
+
+            // Activa botones
+            buttonGuardar.Enabled = true;
+            buttonCancelar.Enabled = true;
+
+            // Desactiva botones
+            buttonAnadir.Enabled = false;
+            buttonEliminar.Enabled = false;
+            buttonModificar.Enabled = false;
+        }
+
+        public void vaciarForm()
         {
             textBoxId.Text = string.Empty;
             textBoxNombre.Text = string.Empty;
@@ -46,9 +66,18 @@ namespace Agenda
             richTextBoxObservaciones.Text = string.Empty;
         }
 
+        private void obtenerContactos()
+        {
+            DataTable table = Repository.obtenerContactos();
+
+            dataGridViewContactos.DataSource = table;
+            dataGridViewContactos.ReadOnly = true;
+        }
+
         private void FormAgendaDeContactos_Load(object sender, EventArgs e)
         {
-            getContacts();
+            modoStandBy();
+            obtenerContactos();
         }
 
         private void dataGridViewContactos_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -64,169 +93,84 @@ namespace Agenda
                 dateTimePickerFechaNacimiento.Value = DateTime.Parse(row.Cells[2].Value.ToString());
                 textBoxTelefono.Text = row.Cells[3].Value.ToString();
                 richTextBoxObservaciones.Text = row.Cells[4].Value.ToString();
-            }
-        }
 
-        private void buttonCancelar_Click(object sender, EventArgs e)
-        {
-            cleanForm();
-        }
-
-        private void buttonModificar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(textBoxId.Text))
-                {
-                    throw new Exception("Seleccione un contacto");
-                }
-
-                if (string.IsNullOrWhiteSpace(textBoxNombre.Text) || string.IsNullOrWhiteSpace(textBoxTelefono.Text))
-                {
-                    throw new Exception("Campos Nombre y Teléfono obligatorios");
-                }
-
-                if (string.IsNullOrWhiteSpace(textBoxTelefono.Text) || !int.TryParse(textBoxTelefono.Text, out int telefono))
-                {
-                    throw new Exception("El télefono ha de ser un número");
-                }
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    // Get new data
-                    string id = textBoxId.Text;
-                    string nombre = textBoxNombre.Text;
-                    DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
-                    //int telefono = int.Parse(textBoxTelefono.Text);
-                    string observaciones = richTextBoxObservaciones.Text;
-
-                    // Execute stored procedure
-                    using (SqlCommand command = new SqlCommand("ActualizarContacto", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@Id", id);
-                        command.Parameters.AddWithValue("@Nombre", nombre);
-                        command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
-                        command.Parameters.AddWithValue("@Telefono", telefono);
-                        command.Parameters.AddWithValue("@Observaciones", observaciones);
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    getContacts();
-
-                    MessageBox.Show("Contacto actualizado de forma exitosa");
-
-                    cleanForm();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al actualizar el contacto: {ex.Message}");
+                buttonModificar.Enabled = true;
             }
         }
 
         private void buttonAnadir_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(textBoxId.Text))
-                {
-                    throw new Exception("Limpie el formulario antes de crear un contacto");
-                }
-
-                if (string.IsNullOrWhiteSpace(textBoxNombre.Text) || string.IsNullOrWhiteSpace(textBoxTelefono.Text))
-                {
-                    throw new Exception("Campos Nombre y Teléfono obligatorios");
-                }
-
-                if (string.IsNullOrWhiteSpace(textBoxTelefono.Text) || !int.TryParse(textBoxTelefono.Text, out int telefono))
-                {
-                    throw new Exception("El télefono ha de ser un número");
-                }
-
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    // Get new data
-                    string id = textBoxId.Text;
-                    string nombre = textBoxNombre.Text;
-                    DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
-                    //int telefono = int.Parse(textBoxTelefono.Text);
-                    string observaciones = richTextBoxObservaciones.Text;
-
-                    // Execute stored procedure
-                    using (SqlCommand command = new SqlCommand("CrearContacto", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@Id", id);
-                        command.Parameters.AddWithValue("@Nombre", nombre);
-                        command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
-                        command.Parameters.AddWithValue("@Telefono", telefono);
-                        command.Parameters.AddWithValue("@Observaciones", observaciones);
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    getContacts();
-
-                    MessageBox.Show("Contacto creado de forma exitosa");
-
-                    cleanForm();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al crear el contacto: {ex.Message}");
-            }
+            vaciarForm();
+            modoEdicion();
         }
 
         private void buttonEliminar_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(textBoxId.Text))
-                {
-                    throw new Exception("Seleccione un contacto");
-                }
+                string id = textBoxId.Text;
 
-                DialogResult confirmResult = MessageBox.Show("¿Seguro que quieres eliminar el contacto?", "¡Acción irreversible!", MessageBoxButtons.YesNo);
+                Repository.eliminarContacto(id);
+                obtenerContactos();
+                vaciarForm();
 
-                if (confirmResult == DialogResult.No)
-                {
-                    throw new Exception("Operación abortada");
-                }
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    // Get new data
-                    string id = textBoxId.Text;
-
-                    // Execute stored procedure
-                    using (SqlCommand command = new SqlCommand("EliminarContacto", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@Id", id);
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    getContacts();
-
-                    MessageBox.Show("Contacto eliminado de forma exitosa");
-
-                    cleanForm();
-                }
+                MessageBox.Show("Contacto eliminado de forma exitosa");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al eliminar el contacto: {ex.Message}");
+            }
+        }
+
+        private void buttonModificar_Click(object sender, EventArgs e)
+        {
+            modoEdicion();
+        }
+
+        private void buttonGuardar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int id = string.IsNullOrWhiteSpace(textBoxId.Text) ? -1 : int.Parse(textBoxId.Text);
+                string nombre = textBoxNombre.Text;
+                DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
+                string telefono = textBoxTelefono.Text;
+                string observaciones = richTextBoxObservaciones.Text;
+
+                if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(telefono))
+                {
+                    throw new Exception("Campos Nombre y Teléfono obligatorios");
+                }
+
+                Contacto contacto = new(id, nombre, fechaNacimiento, telefono, observaciones);
+
+                if (contacto.Id == -1)
+                {
+                    Repository.crearContacto(contacto);
+                }
+                else
+                {
+                    Repository.modificarContacto(contacto);
+                }
+
+                modoStandBy();
+                vaciarForm();
+                obtenerContactos();
+
+                MessageBox.Show("Contacto guardado de forma exitosa");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar el contacto: {ex.Message}");
+            }
+        }
+
+        private void buttonCancelar_Click(object sender, EventArgs e)
+        {
+            modoStandBy();
+            if (string.IsNullOrWhiteSpace(textBoxId.Text))
+            {
+                vaciarForm();
             }
         }
     }

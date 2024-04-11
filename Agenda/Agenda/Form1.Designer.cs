@@ -80,11 +80,13 @@
             // 
             textBoxNombre.Location = new Point(147, 63);
             textBoxNombre.Name = "textBoxNombre";
+            textBoxNombre.ReadOnly = true;
             textBoxNombre.Size = new Size(246, 23);
             textBoxNombre.TabIndex = 6;
             // 
             // dateTimePickerFechaNacimiento
             // 
+            dateTimePickerFechaNacimiento.Enabled = false;
             dateTimePickerFechaNacimiento.Location = new Point(147, 92);
             dateTimePickerFechaNacimiento.Name = "dateTimePickerFechaNacimiento";
             dateTimePickerFechaNacimiento.Size = new Size(200, 23);
@@ -94,6 +96,7 @@
             // 
             textBoxTelefono.Location = new Point(147, 121);
             textBoxTelefono.Name = "textBoxTelefono";
+            textBoxTelefono.ReadOnly = true;
             textBoxTelefono.Size = new Size(134, 23);
             textBoxTelefono.TabIndex = 7;
             // 
@@ -101,6 +104,7 @@
             // 
             richTextBoxObservaciones.Location = new Point(147, 150);
             richTextBoxObservaciones.Name = "richTextBoxObservaciones";
+            richTextBoxObservaciones.ReadOnly = true;
             richTextBoxObservaciones.Size = new Size(236, 69);
             richTextBoxObservaciones.TabIndex = 1;
             richTextBoxObservaciones.Text = "";
@@ -182,15 +186,18 @@
             // 
             // buttonGuardar
             // 
+            buttonGuardar.Enabled = false;
             buttonGuardar.Location = new Point(435, 277);
             buttonGuardar.Name = "buttonGuardar";
             buttonGuardar.Size = new Size(75, 23);
             buttonGuardar.TabIndex = 4;
             buttonGuardar.Text = "Guardar";
             buttonGuardar.UseVisualStyleBackColor = true;
+            buttonGuardar.Click += buttonGuardar_Click;
             // 
             // buttonCancelar
             // 
+            buttonCancelar.Enabled = false;
             buttonCancelar.Location = new Point(516, 277);
             buttonCancelar.Name = "buttonCancelar";
             buttonCancelar.Size = new Size(75, 23);
