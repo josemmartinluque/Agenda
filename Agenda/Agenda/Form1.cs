@@ -74,97 +74,114 @@ namespace Agenda
 
         private void buttonModificar_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(textBoxId.Text))
+            try
             {
-                try
+                if (string.IsNullOrWhiteSpace(textBoxId.Text))
                 {
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        connection.Open();
-
-                        // Get new data
-                        string id = textBoxId.Text;
-                        string nombre = textBoxNombre.Text;
-                        DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
-                        string telefono = textBoxTelefono.Text;
-                        string observaciones = richTextBoxObservaciones.Text;
-
-                        // Execute stored procedure
-                        using (SqlCommand command = new SqlCommand("ActualizarContacto", connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.AddWithValue("@Id", id);
-                            command.Parameters.AddWithValue("@Nombre", nombre);
-                            command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
-                            command.Parameters.AddWithValue("@Telefono", telefono);
-                            command.Parameters.AddWithValue("@Observaciones", observaciones);
-
-                            command.ExecuteNonQuery();
-                        }
-
-                        getContacts();
-
-                        MessageBox.Show("Contacto actualizado de forma exitosa");
-
-                        cleanForm();
-                    }
+                    throw new Exception("Seleccione un contacto");
                 }
-                catch (Exception ex)
+
+                if (string.IsNullOrWhiteSpace(textBoxNombre.Text) || string.IsNullOrWhiteSpace(textBoxTelefono.Text))
                 {
-                    MessageBox.Show($"Error al actualizar el contacto: {ex.Message}");
+                    throw new Exception("Campos Nombre y Teléfono obligatorios");
+                }
+
+                if (string.IsNullOrWhiteSpace(textBoxTelefono.Text) || !int.TryParse(textBoxTelefono.Text, out int telefono))
+                {
+                    throw new Exception("El télefono ha de ser un número");
+                }
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Get new data
+                    string id = textBoxId.Text;
+                    string nombre = textBoxNombre.Text;
+                    DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
+                    //int telefono = int.Parse(textBoxTelefono.Text);
+                    string observaciones = richTextBoxObservaciones.Text;
+
+                    // Execute stored procedure
+                    using (SqlCommand command = new SqlCommand("ActualizarContacto", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", id);
+                        command.Parameters.AddWithValue("@Nombre", nombre);
+                        command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
+                        command.Parameters.AddWithValue("@Telefono", telefono);
+                        command.Parameters.AddWithValue("@Observaciones", observaciones);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    getContacts();
+
+                    MessageBox.Show("Contacto actualizado de forma exitosa");
+
+                    cleanForm();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Seleccione un contacto");
+                MessageBox.Show($"Error al actualizar el contacto: {ex.Message}");
             }
         }
 
         private void buttonAnadir_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBoxId.Text))
+            try
             {
-                try
+                if (!string.IsNullOrWhiteSpace(textBoxId.Text))
                 {
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        connection.Open();
-
-                        // Get new data
-                        string id = textBoxId.Text;
-                        string nombre = textBoxNombre.Text;
-                        DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
-                        string telefono = textBoxTelefono.Text;
-                        string observaciones = richTextBoxObservaciones.Text;
-
-                        // Execute stored procedure
-                        using (SqlCommand command = new SqlCommand("CrearContacto", connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.AddWithValue("@Id", id);
-                            command.Parameters.AddWithValue("@Nombre", nombre);
-                            command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
-                            command.Parameters.AddWithValue("@Telefono", telefono);
-                            command.Parameters.AddWithValue("@Observaciones", observaciones);
-
-                            command.ExecuteNonQuery();
-                        }
-
-                        getContacts();
-
-                        MessageBox.Show("Contacto creado de forma exitosa");
-
-                        cleanForm();
-                    }
+                    throw new Exception("Limpie el formulario antes de crear un contacto");
                 }
-                catch (Exception ex)
+                    
+                if (string.IsNullOrWhiteSpace(textBoxNombre.Text) || string.IsNullOrWhiteSpace(textBoxTelefono.Text))
                 {
-                    MessageBox.Show($"Error al crear el contacto: {ex.Message}");
+                    throw new Exception("Campos Nombre y Teléfono obligatorios");
+                }
+
+                if (string.IsNullOrWhiteSpace(textBoxTelefono.Text) || !int.TryParse(textBoxTelefono.Text, out int telefono))
+                {
+                    throw new Exception("El télefono ha de ser un número");
+                }
+
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Get new data
+                    string id = textBoxId.Text;
+                    string nombre = textBoxNombre.Text;
+                    DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
+                    //int telefono = int.Parse(textBoxTelefono.Text);
+                    string observaciones = richTextBoxObservaciones.Text;
+
+                    // Execute stored procedure
+                    using (SqlCommand command = new SqlCommand("CrearContacto", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", id);
+                        command.Parameters.AddWithValue("@Nombre", nombre);
+                        command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
+                        command.Parameters.AddWithValue("@Telefono", telefono);
+                        command.Parameters.AddWithValue("@Observaciones", observaciones);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    getContacts();
+
+                    MessageBox.Show("Contacto creado de forma exitosa");
+
+                    cleanForm();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Limpie el formulario antes de crear un contacto");
+                MessageBox.Show($"Error al crear el contacto: {ex.Message}");
             }
         }
     }
