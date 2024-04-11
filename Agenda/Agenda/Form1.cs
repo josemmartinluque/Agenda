@@ -51,19 +51,19 @@ namespace Agenda
             getContacts();
         }
 
-        private void dataGridViewContactos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewContactos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            if (e.RowIndex >= 0)
             {
                 // Get the selected row
-                var cellValue = dataGridViewContactos.Rows[e.RowIndex];
+                var row = dataGridViewContactos.Rows[e.RowIndex];
 
                 // Set textboxes to selected row values
-                textBoxId.Text = cellValue.Cells[0].Value.ToString();
-                textBoxNombre.Text = cellValue.Cells[1].Value.ToString();
-                dateTimePickerFechaNacimiento.Value = DateTime.Parse(cellValue.Cells[2].Value.ToString());
-                textBoxTelefono.Text = cellValue.Cells[3].Value.ToString();
-                richTextBoxObservaciones.Text = cellValue.Cells[4].Value.ToString();
+                textBoxId.Text = row.Cells[0].Value.ToString();
+                textBoxNombre.Text = row.Cells[1].Value.ToString();
+                dateTimePickerFechaNacimiento.Value = DateTime.Parse(row.Cells[2].Value.ToString());
+                textBoxTelefono.Text = row.Cells[3].Value.ToString();
+                richTextBoxObservaciones.Text = row.Cells[4].Value.ToString();
             }
         }
 
@@ -117,6 +117,54 @@ namespace Agenda
             else
             {
                 MessageBox.Show("Seleccione un contacto");
+            }
+        }
+
+        private void buttonAnadir_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxId.Text))
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        // Get new data
+                        string id = textBoxId.Text;
+                        string nombre = textBoxNombre.Text;
+                        DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
+                        string telefono = textBoxTelefono.Text;
+                        string observaciones = richTextBoxObservaciones.Text;
+
+                        // Execute stored procedure
+                        using (SqlCommand command = new SqlCommand("CrearContacto", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@Id", id);
+                            command.Parameters.AddWithValue("@Nombre", nombre);
+                            command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
+                            command.Parameters.AddWithValue("@Telefono", telefono);
+                            command.Parameters.AddWithValue("@Observaciones", observaciones);
+
+                            command.ExecuteNonQuery();
+                        }
+
+                        getContacts();
+
+                        MessageBox.Show("Contacto creado de forma exitosa");
+
+                        cleanForm();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al crear el contacto: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Limpie el formulario antes de crear un contacto");
             }
         }
     }
