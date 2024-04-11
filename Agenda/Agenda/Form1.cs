@@ -8,16 +8,17 @@ namespace Agenda
 {
     public partial class FormAgendaDeContactos : Form
     {
+
+        // Set up your connection string
+        string connectionString = "Server=WINAPBXCZRaeb2u\\SQLEXPRESS;Database=Agenda;Trusted_Connection=True;TrustServerCertificate=True";
+
         public FormAgendaDeContactos()
         {
             InitializeComponent();
         }
 
-        private void FormAgendaDeContactos_Load(object sender, EventArgs e)
+        private void getContacts()
         {
-            // Set up your connection string
-            string connectionString = "Server=WINAPBXCZRaeb2u\\SQLEXPRESS;Database=Agenda;Trusted_Connection=True;TrustServerCertificate=True";
-
             // Execute your SQL query
             string selectQuery = "SELECT * FROM Contactos";
 
@@ -34,6 +35,20 @@ namespace Agenda
                 dataGridViewContactos.DataSource = table;
                 dataGridViewContactos.ReadOnly = true;
             }
+        }
+
+        private void cleanForm()
+        {
+            textBoxId.Text = string.Empty;
+            textBoxNombre.Text = string.Empty;
+            dateTimePickerFechaNacimiento.Value = DateTime.Now;
+            textBoxTelefono.Text = string.Empty;
+            richTextBoxObservaciones.Text = string.Empty;
+        }
+
+        private void FormAgendaDeContactos_Load(object sender, EventArgs e)
+        {
+            getContacts();
         }
 
         private void dataGridViewContactos_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -54,11 +69,55 @@ namespace Agenda
 
         private void buttonCancelar_Click(object sender, EventArgs e)
         {
-            textBoxId.Text ="";
-            textBoxNombre.Text = "";
-            dateTimePickerFechaNacimiento.Value = DateTime.Now;
-            textBoxTelefono.Text = "";
-            richTextBoxObservaciones.Text = "";
+            cleanForm();
+        }
+
+        private void buttonModificar_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxId.Text))
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        // Get new data
+                        string id = textBoxId.Text;
+                        string nombre = textBoxNombre.Text;
+                        DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
+                        string telefono = textBoxTelefono.Text;
+                        string observaciones = richTextBoxObservaciones.Text;
+
+                        // Execute stored procedure
+                        using (SqlCommand command = new SqlCommand("ActualizarContacto", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@Id", id);
+                            command.Parameters.AddWithValue("@Nombre", nombre);
+                            command.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
+                            command.Parameters.AddWithValue("@Telefono", telefono);
+                            command.Parameters.AddWithValue("@Observaciones", observaciones);
+
+                            command.ExecuteNonQuery();
+                        }
+
+                        getContacts();
+
+                        MessageBox.Show("Contacto actualizado de forma exitosa");
+
+                        cleanForm();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar el contacto: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione un contacto");
+            }
         }
     }
 }

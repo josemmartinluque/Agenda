@@ -72,6 +72,7 @@
             // 
             textBoxId.Location = new Point(147, 34);
             textBoxId.Name = "textBoxId";
+            textBoxId.ReadOnly = true;
             textBoxId.Size = new Size(59, 23);
             textBoxId.TabIndex = 5;
             // 
@@ -175,6 +176,7 @@
             buttonModificar.TabIndex = 3;
             buttonModificar.Text = "Modificar";
             buttonModificar.UseVisualStyleBackColor = true;
+            buttonModificar.Click += buttonModificar_Click;
             // 
             // buttonGuardar
             // 
