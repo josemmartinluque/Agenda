@@ -158,6 +158,7 @@
             buttonAnadir.TabIndex = 1;
             buttonAnadir.Text = "Añadir";
             buttonAnadir.UseVisualStyleBackColor = true;
+            buttonAnadir.Click += buttonAnadir_Click;
             // 
             // buttonEliminar
             // 
@@ -202,10 +203,11 @@
             dataGridViewContactos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewContactos.Location = new Point(40, 316);
             dataGridViewContactos.Name = "dataGridViewContactos";
+            dataGridViewContactos.RowHeadersVisible = false;
             dataGridViewContactos.RowTemplate.Height = 25;
             dataGridViewContactos.Size = new Size(713, 122);
             dataGridViewContactos.TabIndex = 6;
-            dataGridViewContactos.CellContentClick += dataGridViewContactos_CellContentClick;
+            dataGridViewContactos.CellClick += dataGridViewContactos_CellClick;
             // 
             // FormAgendaDeContactos
             // 
