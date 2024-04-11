@@ -136,7 +136,7 @@ namespace Agenda
                 {
                     throw new Exception("Limpie el formulario antes de crear un contacto");
                 }
-                    
+
                 if (string.IsNullOrWhiteSpace(textBoxNombre.Text) || string.IsNullOrWhiteSpace(textBoxTelefono.Text))
                 {
                     throw new Exception("Campos Nombre y Teléfono obligatorios");
@@ -182,6 +182,51 @@ namespace Agenda
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al crear el contacto: {ex.Message}");
+            }
+        }
+
+        private void buttonEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBoxId.Text))
+                {
+                    throw new Exception("Seleccione un contacto");
+                }
+
+                DialogResult confirmResult = MessageBox.Show("¿Seguro que quieres eliminar el contacto?", "¡Acción irreversible!", MessageBoxButtons.YesNo);
+
+                if (confirmResult == DialogResult.No)
+                {
+                    throw new Exception("Operación abortada");
+                }
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Get new data
+                    string id = textBoxId.Text;
+
+                    // Execute stored procedure
+                    using (SqlCommand command = new SqlCommand("EliminarContacto", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    getContacts();
+
+                    MessageBox.Show("Contacto eliminado de forma exitosa");
+
+                    cleanForm();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar el contacto: {ex.Message}");
             }
         }
     }

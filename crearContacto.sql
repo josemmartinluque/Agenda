@@ -25,11 +25,12 @@ BEGIN;
 			VALUES (@Nombre, @FechaNacimiento, @Telefono, @Observaciones);
 
 			COMMIT;
+
 		END TRY
 		BEGIN CATCH
 
 			ROLLBACK;
-			RAISERROR('Error updating contact. Transaction rolled back.', 16, 1);
+			RAISERROR('Error creating contact. Transaction rolled back.', 16, 1);
 
 		END CATCH;
 END;
