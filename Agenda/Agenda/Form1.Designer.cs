@@ -168,6 +168,7 @@
             buttonEliminar.TabIndex = 2;
             buttonEliminar.Text = "Eliminar";
             buttonEliminar.UseVisualStyleBackColor = true;
+            buttonEliminar.Click += buttonEliminar_Click;
             // 
             // buttonModificar
             // 
@@ -200,6 +201,8 @@
             // 
             // dataGridViewContactos
             // 
+            dataGridViewContactos.AllowUserToAddRows = false;
+            dataGridViewContactos.AllowUserToDeleteRows = false;
             dataGridViewContactos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewContactos.Location = new Point(40, 316);
             dataGridViewContactos.Name = "dataGridViewContactos";

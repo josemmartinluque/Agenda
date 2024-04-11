@@ -26,6 +26,7 @@ BEGIN;
 			WHERE Id = @Id;
 
 			COMMIT;
+
 		END TRY
 		BEGIN CATCH
 
