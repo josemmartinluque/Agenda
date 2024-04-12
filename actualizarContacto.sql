@@ -10,7 +10,8 @@ CREATE PROCEDURE dbo.ActualizarContacto
     @Nombre				VARCHAR(100),
     @FechaNacimiento	DATE,
 	@Telefono			VARCHAR(9),
-	@Observaciones		VARCHAR(500)
+	@Observaciones		VARCHAR(500),
+	@Imagen				VARCHAR(MAX)
 )
 AS
 BEGIN;
@@ -22,7 +23,7 @@ BEGIN;
 		BEGIN TRY
 
 			UPDATE Contactos
-			SET Nombre = @Nombre, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Observaciones = @Observaciones
+			SET Nombre = @Nombre, FechaNacimiento = @FechaNacimiento, Telefono = @Telefono, Observaciones = @Observaciones, Imagen = @Imagen
 			WHERE Id = @Id;
 
 			COMMIT;

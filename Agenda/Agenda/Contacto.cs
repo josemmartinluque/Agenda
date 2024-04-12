@@ -12,15 +12,17 @@ namespace Agenda
         public string Nombre { get; }
         public DateTime FechaNacimiento { get; }
         public string Telefono { get; }
-        public string Observaciones { get; }
+        public string? Observaciones { get; }
+        public string? Imagen { get; }
 
-        public Contacto(int id, string nombre, DateTime fechaNacimiento, string telefono, string observaciones)
+        public Contacto(int id, string nombre, DateTime fechaNacimiento, string telefono, string observaciones, string? imagen)
         {
             this.Id = id;
             this.Nombre = nombre;
             this.FechaNacimiento = fechaNacimiento;
             this.Telefono = telefono;
             this.Observaciones = observaciones;
+            this.Imagen = imagen;
         }
     }
 }
