@@ -25,18 +25,13 @@ namespace Agenda
             // Desactiva botones
             buttonGuardar.Enabled = false;
             buttonCancelar.Enabled = false;
+            buttonImagen.Enabled = false;
 
             // Activa botones
+            dataGridViewContactos.Enabled = true;
             buttonAnadir.Enabled = true;
             buttonEliminar.Enabled = true;
-            if (string.IsNullOrWhiteSpace(textBoxId.Text))
-            {
-                buttonModificar.Enabled = false;
-            }
-            else
-            {
-                buttonModificar.Enabled = true;
-            }
+            buttonModificar.Enabled = string.IsNullOrWhiteSpace(textBoxId.Text) ? false : true;
         }
 
         public void modoEdicion()
@@ -50,8 +45,10 @@ namespace Agenda
             // Activa botones
             buttonGuardar.Enabled = true;
             buttonCancelar.Enabled = true;
+            buttonImagen.Enabled = true;
 
             // Desactiva botones
+            dataGridViewContactos.Enabled = false;
             buttonAnadir.Enabled = false;
             buttonEliminar.Enabled = false;
             buttonModificar.Enabled = false;
@@ -64,6 +61,7 @@ namespace Agenda
             dateTimePickerFechaNacimiento.Value = DateTime.Now;
             textBoxTelefono.Text = string.Empty;
             richTextBoxObservaciones.Text = string.Empty;
+            pictureBoxImagen.Image = null;
         }
 
         private void obtenerContactos()
@@ -72,6 +70,23 @@ namespace Agenda
 
             dataGridViewContactos.DataSource = table;
             dataGridViewContactos.ReadOnly = true;
+
+            seleccionarContacto(0);
+        }
+
+        private void seleccionarContacto(int fila)
+        {
+            // Get the selected row
+            var row = dataGridViewContactos.Rows[fila];
+
+            // Set textboxes to selected row values
+            textBoxId.Text = row.Cells[0].Value.ToString();
+            textBoxNombre.Text = row.Cells[1].Value.ToString();
+            dateTimePickerFechaNacimiento.Value = DateTime.Parse(row.Cells[2].Value.ToString());
+            textBoxTelefono.Text = row.Cells[3].Value.ToString();
+            richTextBoxObservaciones.Text = row.Cells[4].Value.ToString();
+            pictureBoxImagen.Image = Repository.decodificarImagen(row.Cells[5].Value.ToString());
+            pictureBoxImagen.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void FormAgendaDeContactos_Load(object sender, EventArgs e)
@@ -84,16 +99,7 @@ namespace Agenda
         {
             if (e.RowIndex >= 0)
             {
-                // Get the selected row
-                var row = dataGridViewContactos.Rows[e.RowIndex];
-
-                // Set textboxes to selected row values
-                textBoxId.Text = row.Cells[0].Value.ToString();
-                textBoxNombre.Text = row.Cells[1].Value.ToString();
-                dateTimePickerFechaNacimiento.Value = DateTime.Parse(row.Cells[2].Value.ToString());
-                textBoxTelefono.Text = row.Cells[3].Value.ToString();
-                richTextBoxObservaciones.Text = row.Cells[4].Value.ToString();
-
+                seleccionarContacto(e.RowIndex);
                 buttonModificar.Enabled = true;
             }
         }
@@ -136,13 +142,14 @@ namespace Agenda
                 DateTime fechaNacimiento = dateTimePickerFechaNacimiento.Value;
                 string telefono = textBoxTelefono.Text;
                 string observaciones = richTextBoxObservaciones.Text;
+                string? imagen = Repository.codificarImagen(pictureBoxImagen.Image);
 
                 if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(telefono))
                 {
                     throw new Exception("Campos Nombre y Teléfono obligatorios");
                 }
 
-                Contacto contacto = new(id, nombre, fechaNacimiento, telefono, observaciones);
+                Contacto contacto = new(id, nombre, fechaNacimiento, telefono, observaciones, imagen);
 
                 if (contacto.Id == -1)
                 {
@@ -171,6 +178,25 @@ namespace Agenda
             if (string.IsNullOrWhiteSpace(textBoxId.Text))
             {
                 vaciarForm();
+            }
+        }
+
+        private void buttonImagen_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.gif";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the selected image file path
+                    string imagePath = openFileDialog.FileName;
+
+                    // Load the image into the PictureBox
+                    Image image = Image.FromFile(imagePath);
+                    pictureBoxImagen.Image = image;
+                    pictureBoxImagen.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
             }
         }
     }

@@ -10,7 +10,8 @@ CREATE PROCEDURE dbo.CrearContacto
     @Nombre				VARCHAR(100),
     @FechaNacimiento	DATE,
 	@Telefono			VARCHAR(9),
-	@Observaciones		VARCHAR(500)
+	@Observaciones		VARCHAR(500),
+	@Imagen				VARCHAR(MAX)
 )
 AS
 BEGIN;
@@ -21,8 +22,8 @@ BEGIN;
 
 		BEGIN TRY
 
-			INSERT INTO Contactos (Nombre, FechaNacimiento, Telefono, Observaciones)
-			VALUES (@Nombre, @FechaNacimiento, @Telefono, @Observaciones);
+			INSERT INTO Contactos (Nombre, FechaNacimiento, Telefono, Observaciones, Imagen)
+			VALUES (@Nombre, @FechaNacimiento, @Telefono, @Observaciones, @Imagen);
 
 			COMMIT;
 
